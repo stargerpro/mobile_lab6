@@ -15,3 +15,8 @@ Analyzing riverpod_ticker...
 
 1 issue found. (ran in 0.5s)
 - 3.4 why specific arms go first: a switch runs the first arm that matches. AsyncData(:final value) matches every list, so if it came first, the empty and single-item arms would never run. So we must define the specific cases first and then the general ones.
+## Part 4
+- 4.3 refresh vs invalidate: Both keep the previous rows visible during reload, because AsyncValue carries the old value through the loading state. ref.refresh(tickerProvider.future) returns a Future that completes when new data arrives, so the RefreshIndicator spinner stays until the reload finishes. ref.invalidate returns void, so the spinner closes immediately.
+- 4.4 arm order: the AsyncValue(:final value?, isLoading: true) arm sits above AsyncLoading(), so after a retry the rows stay with a thin progress bar and the full-screen spinner only shows on cold start.
+Then explain in one sentence the difference between isRefreshing and isReloading on AsyncValue?
+isRefreshing because of the manual triggers such as ref.refresh() or ref.invalidate() , whereas isReloading rebuilds because one of its dependancies changed
